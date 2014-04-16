@@ -13,7 +13,7 @@ import (
 
 
 
-type Handler func([]string, []string, *lang.Queue)
+type Handler func(*lang.Queue)
 
 func isMember(item string, arr []string) bool {
 	for i := 0; i < len(arr); i++ {
@@ -40,7 +40,7 @@ func collectPaths(paths []string) []string {
 		}
 	}
 
-	fmt.Println(newPaths)
+	//fmt.Println(newPaths)
 	return newPaths
 }
 
@@ -83,14 +83,13 @@ func MonitorFileSystem(paths []string, excludes []string, handleEvents Handler) 
 		}
 	}()
 
-	// call event handler
-	handleEvents(paths, excludes, eventQueue)
+	handleEvents(eventQueue)
 }
 
 func main() {
 	a := []string{"/home/gaige/Dropbox/school/"}
 	b := []string{"/home/gaige/Dropbox/school/2013-2014/cs_301/"}
-	MonitorFileSystem(a, b, func(c, d []string, eventQueue *lang.Queue) {
+	MonitorFileSystem(a, b, func(eventQueue *lang.Queue) {
 		for {
 			time.Sleep(1 * time.Second)
 			fmt.Println(eventQueue.Poll())
