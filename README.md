@@ -5,7 +5,7 @@ A cross platform filesystem monitor in golang.
 
 fsmonitor depends on the following packages:
 
-[queue from gocommons](https://github.com/hishboy/gocommons) and [fsnotify](https://github.com/howeyc/fsnotify)
+[gocommons](https://github.com/hishboy/gocommons) for a queue and [fsnotify](https://github.com/howeyc/fsnotify).
 
 usage:
 
