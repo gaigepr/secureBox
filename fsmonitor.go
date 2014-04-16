@@ -1,5 +1,6 @@
-//package fsmonitor
-package main
+package fsmonitor
+
+//package main
 
 import (
 	"code.google.com/p/go.exp/fsnotify"
@@ -10,8 +11,6 @@ import (
 	"path/filepath"
 	"time"
 )
-
-
 
 type Handler func(*lang.Queue)
 
@@ -31,7 +30,7 @@ func collectPaths(paths []string) []string {
 		err := filepath.Walk(thisPath, func(path string, info os.FileInfo, err error) error {
 			if info.IsDir() {
 				newPaths = append(newPaths, path)
-		}
+			}
 			return nil
 		})
 
