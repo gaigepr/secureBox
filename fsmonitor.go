@@ -84,6 +84,7 @@ func MonitorFileSystem(paths []string, excludes []string, handleEvents Handler) 
 
 	handleEvents(eventQueue)
 }
+
 // This function is an artifact of testing will be removed in time.
 func main() {
 	a := []string{"/home/gaige/Dropbox/school/"}
