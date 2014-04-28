@@ -14,8 +14,8 @@ func isMember(element string, array []string) bool {
 		if array[i] == element {
 			return true
 		}
-		return false
 	}
+	return false
 }
 
 func collectPaths(path []string) []string {
