@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"time"
 
 	"code.google.com/p/go.exp/fsnotify"
 	"github.com/hishboy/gocommons/lang"
