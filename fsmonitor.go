@@ -6,7 +6,6 @@ import (
 	"path/filepath"
 
 	"code.google.com/p/go.exp/fsnotify"
-	"github.com/hishboy/gocommons/lang"
 )
 
 func isMember(element string, array []string) bool {
@@ -18,7 +17,7 @@ func isMember(element string, array []string) bool {
 	return false
 }
 
-func collectPaths(path []string) []string {
+func collectPaths(paths []string) []string {
 	// paths to be returned
 	collectedPaths := make([]string, 1, 1)
 
@@ -60,5 +59,5 @@ func SetupWatch(paths []string, excludes []string) (int, *fsnotify.Watcher) {
 			watchedCount++
 		}
 	}
-	return watcher, watchedCount
+	return watchedCount, watcher
 }
