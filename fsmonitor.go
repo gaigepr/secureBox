@@ -1,35 +1,33 @@
-package fsmonitor
-
-//package main
+package main
 
 import (
-	"code.google.com/p/go.exp/fsnotify"
-	"github.com/hishboy/gocommons/lang"
-
 	"fmt"
 	"os"
 	"path/filepath"
 	"time"
+
+	"code.google.com/p/go.exp/fsnotify"
+	"github.com/hishboy/gocommons/lang"
 )
 
-type Handler func(*lang.Queue)
-
-func isMember(item string, arr []string) bool {
-	for i := 0; i < len(arr); i++ {
-		if arr[i] == item {
+func isMember(element string, array []string) bool {
+	for i := 0; i < len(array); i++ {
+		if array[i] == element {
 			return true
 		}
+		return false
 	}
-	return false
 }
 
-func collectPaths(paths []string) []string {
-	newPaths := make([]string, 1, 1)
+func collectPaths(path []string) []string {
+	// paths to be returned
+	collectedPaths := make([]string, 1, 1)
 
+	//
 	for _, thisPath := range paths {
 		err := filepath.Walk(thisPath, func(path string, info os.FileInfo, err error) error {
 			if info.IsDir() {
-				newPaths = append(newPaths, path)
+				collectedPaths = append(collectedPaths, path)
 			}
 			return nil
 		})
@@ -39,21 +37,18 @@ func collectPaths(paths []string) []string {
 		}
 	}
 
-	//fmt.Println(newPaths)
-	return newPaths
+	return collectedPaths
 }
 
-func MonitorFileSystem(paths []string, excludes []string, handleEvents Handler) {
-	var watchedCount int = 0
+func SetupWatch(paths []string, excludes []string) (int, *fsnotify.Watcher) {
+	var watchedCount int
+
 	paths = collectPaths(paths)
 	excludes = collectPaths(excludes)
 
-	eventQueue := lang.NewQueue()
-
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
-		// report err up?
-		fmt.Println("Error creating watcher: ", err)
+		fmt.Println("Error establishing watcher: ", err)
 	}
 
 	// establish watches
@@ -61,38 +56,10 @@ func MonitorFileSystem(paths []string, excludes []string, handleEvents Handler) 
 		if !(isMember(path, excludes)) {
 			err = watcher.Watch(path)
 			if err != nil {
-				// report error up?
 				fmt.Println("Error: ", err, "  establishing watch on: ", path)
 			}
 			watchedCount++
 		}
 	}
-
-	fmt.Println("Directories watched: ", watchedCount)
-
-	go func() {
-		for {
-			select {
-			case ev := <-watcher.Event:
-				eventQueue.Push(ev)
-				//fmt.Println(ev)
-			case err := <-watcher.Error:
-				fmt.Println(err)
-			}
-		}
-	}()
-
-	handleEvents(eventQueue)
-}
-
-// This function is an artifact of testing will be removed in time.
-func main() {
-	a := []string{"/home/gaige/Dropbox/school/"}
-	b := []string{"/home/gaige/Dropbox/school/2013-2014/cs_301/"}
-	MonitorFileSystem(a, b, func(eventQueue *lang.Queue) {
-		for {
-			time.Sleep(1 * time.Second)
-			fmt.Println(eventQueue.Poll())
-		}
-	})
+	return watcher, watchedCount
 }
