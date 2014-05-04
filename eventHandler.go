@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"regexp"
 	"time"
 
@@ -12,6 +13,7 @@ import (
 type Event struct {
 	Name      string
 	FilePath  string
+	IsDir     bool
 	EventType int
 	EventTime time.Time
 }
@@ -31,15 +33,26 @@ func PackageEvent(event *fsnotify.FileEvent) Event {
 		return 1
 	}()
 
-	re, err := regexp.Compile("(.+/)/(.+)")
+
+	var isDir bool
+	if !event.IsDelete() && !event.IsRename() {
+		info, err := os.Lstat(event.Name)
+		if err != nil {
+			fmt.Println("Error in PackageEvent checking on file: ", err)
+		}
+		isDir = info.IsDir()
+	}
+
+	re, err := regexp.Compile(".+/(.+)$")
 	if err != nil {
-		fmt.Println("Problem compiling regexp")
+		fmt.Println("Error compiling regexp")
 	}
 	result := re.FindStringSubmatch(event.Name)
 
 	return Event{
-		result[2],
 		result[1],
+		result[0],
+		isDir,
 		eventType,
 		time.Now(),
 	}
@@ -52,7 +65,13 @@ func EventHandler(eventQueue *lang.Queue) {
 			// Type assert to pullthe struct out of the interface
 			event := eventQueue.Poll().(Event)
 			fmt.Println(event)
+			time.Sleep(time.Millisecond * 500)
+			if !event.IsDir {
+				// This reading of the file causes a modify event
+				ReadAndEncrypt(event.FilePath)
+			}
+		} else {
+			time.Sleep(time.Millisecond * 50)
 		}
-		time.Sleep(time.Millisecond * 500)
 	}
 }
