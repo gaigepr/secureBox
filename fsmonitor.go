@@ -8,7 +8,7 @@ import (
 	"code.google.com/p/go.exp/fsnotify"
 )
 
-func isMember(element string, array []string) int {
+func indexOf(element string, array []string) int {
 	for i := 0; i < len(array); i++ {
 		if array[i] == element {
 			return i
@@ -54,7 +54,7 @@ func SetupWatch(paths []string, excludes []string) (int, *fsnotify.Watcher) {
 
 	// establish watches
 	for _, path := range paths {
-		if isMember(path, excludes) >= -1 {
+		if indexOf(path, excludes) >= -1 {
 			err = watcher.Watch(path)
 			if err != nil {
 				fmt.Println("Error: ", err, "  establishing watch on: ", path)
