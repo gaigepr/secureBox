@@ -56,15 +56,41 @@ func PackageEvent(event *fsnotify.FileEvent) Event {
 	}
 }
 
-func EventHandler(eventChan chan Event) {
+func EventHandler(eventChan chan Event, watcher *fsnotify.Watcher) {
 	fmt.Println("In event handler")
 	for {
-
 		event := <-eventChan
-		fmt.Println(event)
-		if !event.IsDir {
-			// This reading of the file causes a modify event
-			ReadAndEncrypt(event.FilePath)
+		switch {
+		case event.EventType == fsnotify.FSN_CREATE:
+			if event.IsDir {
+				watcher.Watch(event.FilePath)
+			}
+			fmt.Printf("EVENT %s: %s \t%v\n", "CREATE", event.FilePath, event.EventTime)
+
+		case event.EventType == fsnotify.FSN_MODIFY:
+			fmt.Printf("EVENT %s: %s \t%v\n", "MODIFY", event.FilePath, event.EventTime)
+
+		case event.EventType == fsnotify.FSN_DELETE:
+			if event.IsDir {
+				err := watcher.RemoveWatch(event.FilePath)
+				if err != nil {
+					fmt.Println("Error removing watchg (delete): ", err)
+				}
+			}
+			fmt.Printf("EVENT %s: %s \t%v\n", "DELETE", event.FilePath, event.EventTime)
+
+		case event.EventType == fsnotify.FSN_RENAME:
+			if event.IsDir {
+				err := watcher.RemoveWatch(event.FilePath)
+				if err != nil {
+					fmt.Println("Error removing watch (rename): ", err)
+				}
+			}
+			fmt.Printf("EVENT %s: %s \t%v\n", "RENAME", event.FilePath, event.EventTime)
+
 		}
+
+		// This reading of the file causes a modify event
+		//ReadAndEncrypt(event.FilePath)
 	}
 }

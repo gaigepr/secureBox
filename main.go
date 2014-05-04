@@ -24,7 +24,7 @@ func main() {
 		}
 	}()
 
-	go EventHandler(eventChan)
+	go EventHandler(eventChan, watcher)
 
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, os.Kill)
