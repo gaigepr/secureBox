@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"code.google.com/p/go.exp/fsnotify"
-	"github.com/hishboy/gocommons/lang"
 )
 
 type Event struct {
@@ -58,20 +57,15 @@ func PackageEvent(event *fsnotify.FileEvent) Event {
 	}
 }
 
-func EventHandler(eventQueue *lang.Queue) {
+func EventHandler(eventChan chan Event) {
 	fmt.Println("In event handler")
 	for {
-		if eventQueue.Len() > 0 {
-			// Type assert to pullthe struct out of the interface
-			event := eventQueue.Poll().(Event)
-			fmt.Println(event)
-			time.Sleep(time.Millisecond * 500)
-			if !event.IsDir {
-				// This reading of the file causes a modify event
-				ReadAndEncrypt(event.FilePath)
-			}
-		} else {
-			time.Sleep(time.Millisecond * 50)
+
+		event := <-eventChan
+		fmt.Println(event)
+		if !event.IsDir {
+			// This reading of the file causes a modify event
+			ReadAndEncrypt(event.FilePath)
 		}
 	}
 }
