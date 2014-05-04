@@ -31,9 +31,6 @@ func PackageEvent(event *fsnotify.FileEvent) Event {
 		return 1
 	}()
 
-	//var name string
-	//var path string
-
 	re, err := regexp.Compile("(.+/)/(.+)")
 	if err != nil {
 		fmt.Println("Problem compiling regexp")
