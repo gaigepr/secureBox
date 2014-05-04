@@ -48,10 +48,6 @@ func PackageEvent(event *fsnotify.FileEvent) Event {
 func EventHandler(eventQueue *lang.Queue) {
 	fmt.Println("In event handler")
 	for {
-
-		// Events put into the queue lose most of their info.
-		// Before pushing onto the queue must make own new
-		// struct that conatins relevant info + timestamp etc
 		if eventQueue.Len() > 0 {
 			// Type assert to pullthe struct out of the interface
 			event := eventQueue.Poll().(Event)
