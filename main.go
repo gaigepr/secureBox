@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"time"
+	"os"
+	"os/signal"
 
 	"github.com/hishboy/gocommons/lang"
 )
@@ -28,7 +29,9 @@ func main() {
 
 	go EventHandler(eventQueue)
 
-	for {
-		time.Sleep(time.Millisecond * 1000)
-	}
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt, os.Kill)
+
+	s := <-c
+	fmt.Println("Got Signal: ", s)
 }
