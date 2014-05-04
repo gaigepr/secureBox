@@ -19,9 +19,9 @@ func main() {
 
 	go func() {
 		for {
-			ev := <-watcher.Event
-			if ev != nil {
-				eventQueue.Push(ev)
+			select {
+			case ev := <-watcher.Event:
+				eventQueue.Push(PackageEvent(ev))
 			}
 		}
 	}()
