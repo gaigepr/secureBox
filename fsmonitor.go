@@ -26,7 +26,7 @@ func collectPaths(paths []string) []string {
 			// Function arg for filepath.Walk
 			func(path string, info os.FileInfo, err error) error {
 				if info == nil {
-					fmt.Println("File or directory does not exist.")
+					fmt.Println("File or directory does not exist.", path)
 				} else if info.IsDir() {
 					collectedPaths = append(collectedPaths, path)
 				}
