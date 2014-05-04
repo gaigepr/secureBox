@@ -20,13 +20,13 @@ func PackageEvent(event *fsnotify.FileEvent) Event {
 	eventType := func() int {
 		switch {
 		case event.IsCreate():
-			return 1
+			return fsnotify.FSN_CREATE
 		case event.IsModify():
-			return 2
+			return fsnotify.FSN_MODIFY
 		case event.IsDelete():
-			return 4
+			return fsnotify.FSN_DELETE
 		case event.IsRename():
-			return 8
+			return fsnotify.FSN_RENAME
 		}
 		return 1
 	}()
