@@ -22,14 +22,16 @@ func collectPaths(paths []string) []string {
 	collectedPaths := make([]string, 1, 1)
 
 	for _, thisPath := range paths {
-		err := filepath.Walk(thisPath, func(path string, info os.FileInfo, err error) error {
-			if info == nil {
-				fmt.Println("File or directory does not exist.")
-			} else if info.IsDir() {
-				collectedPaths = append(collectedPaths, path)
-			}
-			return nil
-		})
+		err := filepath.Walk(thisPath,
+			// Function arg for filepath.Walk
+			func(path string, info os.FileInfo, err error) error {
+				if info == nil {
+					fmt.Println("File or directory does not exist.")
+				} else if info.IsDir() {
+					collectedPaths = append(collectedPaths, path)
+				}
+				return nil
+			})
 
 		if err != nil {
 			fmt.Println(err)

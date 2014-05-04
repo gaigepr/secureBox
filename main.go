@@ -27,6 +27,7 @@ func main() {
 	}()
 
 	go EventHandler(eventQueue)
+
 	for {
 		time.Sleep(time.Millisecond * 1000)
 	}
