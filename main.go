@@ -19,13 +19,12 @@ func main() {
 		for {
 			select {
 			case ev := <-watcher.Event:
-				eventChan<- PackageEvent(ev)
+				eventChan <- PackageEvent(ev)
 			}
 		}
 	}()
 
 	go EventHandler(eventChan)
-
 
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, os.Kill)

@@ -32,7 +32,6 @@ func PackageEvent(event *fsnotify.FileEvent) Event {
 		return 1
 	}()
 
-
 	var isDir bool
 	if !event.IsDelete() && !event.IsRename() {
 		info, err := os.Lstat(event.Name)
