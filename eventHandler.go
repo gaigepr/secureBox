@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"regexp"
 	"time"
 
 	"code.google.com/p/go.exp/fsnotify"
@@ -30,15 +31,21 @@ func PackageEvent(event *fsnotify.FileEvent) Event {
 		return 1
 	}()
 
-	//fmt.Println("EVENTTTTT: ", event)
+	//var name string
+	//var path string
+
+	re, err := regexp.Compile("(.+/)/(.+)")
+	if err != nil {
+		fmt.Println("Problem compiling regexp")
+	}
+	result := re.FindStringSubmatch(event.Name)
 
 	return Event{
-		event.Name,
-		event.Name,
+		result[2],
+		result[1],
 		eventType,
 		time.Now(),
 	}
-
 }
 
 func EventHandler(eventQueue *lang.Queue) {
