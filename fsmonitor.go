@@ -37,7 +37,6 @@ func collectPaths(paths []string) []string {
 			fmt.Println(err)
 		}
 	}
-
 	return collectedPaths
 }
 
@@ -54,7 +53,7 @@ func SetupWatch(paths []string, excludes []string) (int, *fsnotify.Watcher) {
 
 	// establish watches
 	for _, path := range paths {
-		if indexOf(path, excludes) >= -1 {
+		if indexOf(path, excludes) == -1 {
 			err = watcher.Watch(path)
 			if err != nil {
 				fmt.Println("Error: ", err, "  establishing watch on: ", path)
