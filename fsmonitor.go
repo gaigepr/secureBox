@@ -17,7 +17,7 @@ func indexOf(element string, array []string) int {
 	return -1
 }
 
-func collectPaths(paths []string) []string {
+func CollectPaths(paths []string) []string {
 	// paths to be returned
 	collectedPaths := make([]string, 1, 1)
 
@@ -43,8 +43,8 @@ func collectPaths(paths []string) []string {
 func SetupWatch(paths []string, excludes []string) (int, *fsnotify.Watcher) {
 	var watchedCount int
 
-	paths = collectPaths(paths)
-	excludes = collectPaths(excludes)
+	paths = CollectPaths(paths)
+	excludes = CollectPaths(excludes)
 
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
