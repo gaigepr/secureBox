@@ -21,6 +21,8 @@ func main() {
 			select {
 			case ev := <-watcher.Event:
 				eventChan <- PackageEvent(ev)
+			case err := <-watcher.Error:
+				fmt.Println(err)
 			}
 		}
 	}()
