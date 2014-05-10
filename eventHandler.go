@@ -98,8 +98,5 @@ func EventHandler(eventChan chan Event, watcher *fsnotify.Watcher) {
 			fmt.Printf("EVENT %s: %s \t%v\n", "RENAME", event.FilePath, event.EventTime)
 
 		}
-
-		// This reading of the file causes a modify event
-		//ReadAndEncrypt(event.FilePath)
 	}
 }
