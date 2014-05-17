@@ -16,6 +16,7 @@ To accomplish the above goals, secureBox will require that every file synchroniz
 
 
 Given two users, Alice and Bill, it is easy to securely share a file between the two of them.
+
 * Alice gets a copy of Bill's master public key (giving him the ability to encrypt things such that only Bill can see them)
 * Alice uses this to encrypt the private key of file foo.txt (and foo.txt itself)
 * Alice gives this encrypted version of the private and file key to Bill
