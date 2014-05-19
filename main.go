@@ -7,6 +7,15 @@ import (
 )
 
 func main() {
+	if os.Args[1] == "test" {
+		TestCrypto()
+		return
+	}
+
+
+
+
+
 	paths := []string{"/home/gaige/testing/"}
 	excludes := []string{"/home/gaige/testing/no_watch/"}
 
