@@ -1,12 +1,14 @@
 package main
 
 import (
+	"code.google.com/p/go.crypto/pbkdf2"
+	//"crypto/aes"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/sha512"
+	"crypto/sha256"
 	"fmt"
 	"os"
-	"crypto/pbkdf2"
 )
 
 func ReadAndEncrypt(filename string) {
@@ -50,11 +52,33 @@ func TestCrypto() {
 	fmt.Println(len(message))
 	encMessage := encryptRSA(&key.PublicKey, message)
 	decMessage := decryptRSA(key, encMessage)
-	fmt.Println("message is: {", string(message[:]),"}\ndecrypted message is: {", string(decMessage[:]), "}")
+	fmt.Println("message is: {", string(message[:]), "}\ndecrypted message is: {", string(decMessage[:]), "}")
 	if len(message) == len(decMessage) {
 		fmt.Printf("It worked!\n")
 	}
 	return
+}
+
+// creates a unique(relying on crypto/rand) AES key for the per file keys
+func createAES() []byte {
+	key := make([]byte, 32)
+	_, err := rand.Read(key)
+	if err != nil {
+		fmt.Println("ERROR:", err)
+	}
+	return key
+}
+
+// creates the master AES key for the user based on their password.
+func createUserAES(password string) ([]byte, []byte) {
+	salt := make([]byte, 10) // TODO: make 10 a constant variable
+	_, err := rand.Read(salt)
+	if err != nil {
+		fmt.Println("ERROR:", err)
+	}
+	key := pbkdf2.Key([]byte(password), salt, 5000, 32, sha256.New) // TODO: make 5000 a const var
+
+	return key, salt
 }
 
 // create an RSA key when given a size.
