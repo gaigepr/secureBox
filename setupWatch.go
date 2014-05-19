@@ -3,16 +3,16 @@ package main
 import (
 	"fmt"
 
-	"code.google.com/p/go.exp/fsnotify"
+	"code.google.com/p/go.exp/inotify"
 )
 
-func SetupWatch(paths []string, excludes []string) (int, *fsnotify.Watcher) {
+func SetupWatch(paths []string, excludes []string) (int, *inotify.Watcher) {
 	var watchedCount int
 
 	paths = CollectPaths(paths)
 	excludes = CollectPaths(excludes)
 
-	watcher, err := fsnotify.NewWatcher()
+	watcher, err := inotify.NewWatcher()
 	if err != nil {
 		fmt.Println("Error establishing watcher: ", err)
 	}

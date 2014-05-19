@@ -7,14 +7,10 @@ import (
 )
 
 func main() {
-	if os.Args[1] == "test" {
+	if len(os.Args) > 1 && os.Args[1] == "test" {
 		TestCrypto()
 		return
 	}
-
-
-
-
 
 	paths := []string{"/home/gaige/testing/"}
 	excludes := []string{"/home/gaige/testing/no_watch/"}
@@ -22,7 +18,6 @@ func main() {
 	// Create watch, add directories to it
 	watchedCount, watcher := SetupWatch(paths, excludes)
 	fmt.Println("Directories watched: ", watchedCount)
-
 
 	eventChan := make(chan Event)
 	go func() {

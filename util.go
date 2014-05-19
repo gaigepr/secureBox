@@ -7,34 +7,20 @@ import (
 	"regexp"
 	"time"
 
-	"code.google.com/p/go.exp/fsnotify"
+	"code.google.com/p/go.exp/inotify"
 )
 
 type Event struct {
 	Name      string
 	FilePath  string
 	IsDir     bool
-	EventType int
+	EventType uint32
 	EventTime time.Time
 }
 
-func PackageEvent(event *fsnotify.FileEvent) Event {
-	eventType := func() int {
-		switch {
-		case event.IsCreate():
-			return fsnotify.FSN_CREATE
-		case event.IsModify():
-			return fsnotify.FSN_MODIFY
-		case event.IsDelete():
-			return fsnotify.FSN_DELETE
-		case event.IsRename():
-			return fsnotify.FSN_RENAME
-		}
-		return 1
-	}()
-
+func PackageEvent(event *inotify.Event) Event {
 	var isDir bool
-	if !event.IsDelete() && !event.IsRename() {
+	if event.Mask == inotify.IN_ISDIR {
 		info, err := os.Lstat(event.Name)
 		if err != nil {
 			fmt.Println("Error in PackageEvent checking on file: ", err)
@@ -52,7 +38,7 @@ func PackageEvent(event *fsnotify.FileEvent) Event {
 		result[1],
 		result[0],
 		isDir,
-		eventType,
+		event.Mask,
 		time.Now(),
 	}
 }
