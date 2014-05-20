@@ -4,44 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"regexp"
-	"time"
-
-	"code.google.com/p/go.exp/inotify"
 )
-
-type Event struct {
-	Name      string
-	FilePath  string
-	IsDir     bool
-	EventType uint32
-	EventTime time.Time
-}
-
-func PackageEvent(event *inotify.Event) Event {
-	var isDir bool
-	if event.Mask == inotify.IN_ISDIR {
-		info, err := os.Lstat(event.Name)
-		if err != nil {
-			fmt.Println("Error in PackageEvent checking on file: ", err)
-		}
-		isDir = info.IsDir()
-	}
-
-	re, err := regexp.Compile(".+/(.+)$")
-	if err != nil {
-		fmt.Println("Error compiling regexp")
-	}
-	result := re.FindStringSubmatch(event.Name)
-
-	return Event{
-		result[1],
-		result[0],
-		isDir,
-		event.Mask,
-		time.Now(),
-	}
-}
 
 func IndexOf(element string, array []string) int {
 	for i := 0; i < len(array); i++ {

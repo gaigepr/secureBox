@@ -19,19 +19,7 @@ func main() {
 	watchedCount, watcher := SetupWatch(paths, excludes)
 	fmt.Println("Directories watched: ", watchedCount)
 
-	eventChan := make(chan Event)
-	go func() {
-		for {
-			select {
-			case ev := <-watcher.Event:
-				eventChan <- PackageEvent(ev)
-			case err := <-watcher.Error:
-				fmt.Println(err)
-			}
-		}
-	}()
-
-	go EventHandler(eventChan, watcher)
+	go EventHandler(watcher)
 
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, os.Kill)
