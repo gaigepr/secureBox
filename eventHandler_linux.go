@@ -30,7 +30,14 @@ func EventHandler(watcher *inotify.Watcher) {
 				fmt.Println(event, time.Now())
 
 			case event.Mask == DIR_CREATE:
-				watcher.Watch(event.Name)
+				paths := CollectPaths([]string{event.Name})
+				if len(paths) > 1 {
+					for i := 0; i < len(paths); i++ {
+						watcher.Watch(paths[i])
+					}
+				} else {
+					watcher.Watch(event.Name)
+				}
 				fmt.Println(event.String(), time.Now())
 
 			case event.Mask == FILE_CREATE:
@@ -65,7 +72,6 @@ func EventHandler(watcher *inotify.Watcher) {
 				if event.Cookie == moveFromEvent.Cookie {
 					fmt.Println("\t", event.String(), time.Now())
 				}
-
 			}
 
 		case err := <-watcher.Error:
