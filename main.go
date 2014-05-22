@@ -16,7 +16,7 @@ type Configuration struct {
 
 func main() {
 	// Command line arg(s)
-	if !(len(os.Args) > 1) {
+	if len(os.Args) < 1 {
 		panic("Not enough command line args: Need path to config file!")
 	}
 
@@ -37,7 +37,6 @@ func main() {
 	if err := decoder.Decode(&config); err != nil {
 		fmt.Println("ERROR parsing json: ", err)
 	}
-	fmt.Println(config)
 
 	// Create watch and add directories to it
 	watchedCount, watcher := SetupWatch(config.WatchRoots, config.ExcludeRoots)
