@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"os"
 	"os/signal"
 )
@@ -35,7 +34,7 @@ func main() {
 
 	// Decode config file into Configuration struct
 	decoder := json.NewDecoder(file)
-	if err = decoder.Decode(&config); if err != nil {
+	if err := decoder.Decode(&config); err != nil {
 		fmt.Println("ERROR parsing json: ", err)
 	}
 	fmt.Println(config)
