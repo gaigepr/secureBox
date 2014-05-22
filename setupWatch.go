@@ -7,8 +7,10 @@ import (
 )
 
 func SetupWatch(paths []string, excludes []string) (int, *inotify.Watcher) {
+	// How many directories are being watched
 	var watchedCount int
 
+	// Collect all subdirs of the watch and exclude roots
 	paths = CollectPaths(paths)
 	excludes = CollectPaths(excludes)
 
