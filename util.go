@@ -20,13 +20,13 @@ func CollectPaths(paths []string) []string {
 	collectedPaths := make([]string, 1, 1)
 
 	for _, thisPath := range paths {
-		err := filepath.Walk(thisPath,
+		err := filepath.Walk(filepath.Clean(thisPath),
 			// Function arg for filepath.Walk
 			func(path string, info os.FileInfo, err error) error {
 				if info == nil {
 					fmt.Println("File or directory does not exist.", path)
 				} else if info.IsDir() {
-					collectedPaths = append(collectedPaths, filepath.Clean(path))
+					collectedPaths = append(collectedPaths, path)
 				}
 				return nil
 			})
