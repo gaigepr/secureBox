@@ -4,6 +4,8 @@ secureBox
 
 An end-to-end encrypted file synchronization client in go.
 
+If after reading this you are interested in contributing or just in talking about secureBox, pop into our IRC channel on irc.freenode.net --  ```#secure-box```
+
 Currently this is being developed on linux for linux. In the future if we have more support or a demand for cross platform support, we will add it!
 
 secureBox depends on the following packages: [inotify](http://godoc.org/code.google.com/p/go.exp/inotify).
