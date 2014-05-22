@@ -1,0 +1,6 @@
+{
+    "Username" : "username",
+    "Password" : "password",
+    "WatchRoots" : ["/home/gaige/testing/"],
+    "ExcludeRoots" : ["/home/gaige/testing/no_watch/"]
+}
