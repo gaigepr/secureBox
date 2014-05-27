@@ -28,11 +28,11 @@ This construction will be driven based on metadata captured from the file source
 An example:
 -----------
 
-* source file location ~/secure-box/family photos/trip to disney/mickey_is_fucking_goofy.jpg
+* source file location ~/secure-box/family photos/trip to disney/mickey_is_goofy.jpg
 * destination file location /mnt/backup
 * metadata collected: local file source, local file destination, option flag to compress, option flag to chunk, option flag to encrypt
 
-'''Actors constructed from left to right, right most actor is point of entry to the pipeline'''
+```Actors constructed from left to right, right most actor is point of entry to the pipeline```
 
 read pipe:
 ----------
@@ -54,3 +54,32 @@ BufferedFile | HashCollector | ContainerFormat | EncryptedBlock | CompressedBloc
 write pipe:
 -----------
 BufferedFile | HashCollector
+
+
+Container Format
+================
+
+item name | item purpose
+--------- | ------------
+magic_number | http://lmgtfy.com/?q=magic+numbers
+container_version | 4 bits to represent the version of the container used
+container_flags | 64 bits to represent metadata for setting up a read pipeline
+header_start | guid marker to represent the start of the header section
+header_field_size | 4 bits to represent the size of the field to read in
+header_field_value | value to be read in
+... | lather, rinse, repeat
+header_size | 32 bits to represent the overall size of the header container
+header_hash | hash of data written to header for validation against data corruption
+data_start | guid marker to represent the start of the data section
+block_type | 4 bits to represent the type of the block
+src_size | 32 bits to present the size of the data read from disk
+block_id | 64 bits to represent the unique id of the data
+block_size | 32 bits to represent the size of block to read from the container
+block_start | begin data section
+... | lather, rinse, repeat
+footer_start | guid marker to represent the start of the footer section
+footer_field_size | 4 bits to represent the size of the field to read in
+footer_field_value | value to be read in
+... | lather, rinse, repeat
+footer_size | 32 bits to represent the overall size of the footer container
+footer_hash | hash of data written to footer for validation against data corruption
